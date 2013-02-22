@@ -36,8 +36,8 @@ on fs
     # mount partitions
     mount vfat /dev/block/mmcblk0p2 /rom sync noatime nodiratime uid=1000,gid=1000,fmask=117,dmask=007
     mount ext4 /dev/block/mmcblk0p5 /system wait ro barrier=1
-    mount ext4 /dev/block/mmcblk0p6 /data wait noatime nosuid nodev barrier=1 noauto_da_alloc
-    mount ext4 /dev/block/mmcblk0p7 /cache wait noatime nosuid nodev barrier=1
+    mount ext4 /dev/block/mmcblk0p6 /data wait noatime nodev barrier=1 noauto_da_alloc journal_async_commit
+    mount ext4 /dev/block/mmcblk0p7 /cache wait noatime nodev barrier=1 noauto_da_alloc journal_async_commit
 
 on post-fs-data
     # we will remap this as /mnt/sdcard with the sdcard fuse tool
@@ -189,6 +189,13 @@ on post-fs-data
     chown system system /sys/devices/platform/omapdss/display2/timings
     chown system system /sys/devices/platform/omapdss/display3/timings
     chown system system /sys/devices/platform/omapdss/display2/code
+
+
+#Change permission for backlight and lcd
+        chown system system /sys/class/backlight/panel/brightness
+        chmod 0666 /sys/class/backlight/panel/brightness
+        chown system radio /sys/class/lcd/panel/lcd_type
+        chown system radio /sys/class/lcd/panel/lcd_power
 
 on boot
     
